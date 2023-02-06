@@ -3,7 +3,7 @@
 pkgname="podman"
 _gitname="podman"
 provides=('podman')
-pkgver='4.3.1'
+pkgver='4.4.0'
 pkgrel='1'
 pkgdesc="A tool for managing OCI containers and pods."
 arch=("amd64")

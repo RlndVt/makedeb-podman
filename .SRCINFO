@@ -3,7 +3,7 @@ pkgname = podman
 pkgbase = podman
 pkgdesc = A tool for managing OCI containers and pods.
 pkgrel = 1
-pkgver = 4.3.1
+pkgver = 4.4.0
 url = https://podman.io/
 arch = amd64
 backup = /etc/containers/registries.conf
@@ -36,7 +36,7 @@ makedepends = golang-go>=1.16.0
 makedepends = pkg-config
 makedepends = git
 provides = podman
-source = git+https://github.com/containers/podman.git#tag=v4.3.1
+source = git+https://github.com/containers/podman.git#tag=v4.4.0
 source = https://src.fedoraproject.org/rpms/containers-common/raw/main/f/registries.conf
 source = https://src.fedoraproject.org/rpms/containers-common/raw/main/f/default-policy.json
 b2sums = SKIP
