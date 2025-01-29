@@ -3,23 +3,50 @@
 pkgname="podman"
 _gitname="podman"
 provides=('podman')
-pkgver='4.4.2'
+pkgver='4.7.2'
 pkgrel='1'
 pkgdesc="A tool for managing OCI containers and pods."
 arch=("amd64")
 url="https://podman.io/"
 license=('Apache')
-makedepends=('golang-go>=1.16.0' 'pkg-config' 'git')
-depends=('slirp4netns' 'systemd' 'libapparmor-dev' 'conmon>=2.1.5' 'btrfs-progs' 'runc' 'go-md2man' 'iptables' 'libassuan-dev' 'libbtrfs-dev' 'libc6-dev' 'libdevmapper-dev' 'libglib2.0-dev' 'libgpgme-dev' 'libgpg-error-dev' 'libprotobuf-dev' 'libprotobuf-c-dev' 'libseccomp-dev' 'libselinux1-dev' 'libsystemd-dev' 'uidmap')
-source=("git+https://github.com/containers/podman.git#tag=v${pkgver}"
-		"https://src.fedoraproject.org/rpms/containers-common/raw/main/f/registries.conf"
-		"https://src.fedoraproject.org/rpms/containers-common/raw/main/f/default-policy.json")
-b2sums=('SKIP'
-        '0cb5f1e8b30a48b337bea4effcad172d3c379ccde4fa89d500cfffd6e8bf017f22664e923f53584d6322662a966bddf584f2298c9aae464a33e4bdb1f399f792'
-        '9b4d41f6063ff6131648d801ad44951f3a426551deb5a6d3ea4f991339d5f375f003fffcf637632c9d83b1e74eda959750906316a1c510c728cf8a93548d4cf8')
+makedepends=(
+    'golang-go>=2:1.18.0'
+    'pkg-config'
+    'git'
+    'libbtrfs-dev'
+    'libsystemd-dev'
+    'libdevmapper-dev'
+    'libgpgme-dev'
+    'libseccomp-dev'
+    ) # 'libapparmor-dev' 'libassuan-dev' 'libc6-dev' 'libglib2.0-dev' 'libgpg-error-dev' 'libprotobuf-dev' 'libprotobuf-c-dev' 'libselinux1-dev'
+depends=(
+    'systemd'
+    'conmon>=2.1.5'
+    'crun'
+    'golang-github-containers-common'
+    'libc6'
+    'libdevmapper1.02.1'
+    'libgpgme11'
+    'libseccomp2'
+    'libsubid4'
+    )
+source=("git+https://github.com/containers/podman.git#tag=v${pkgver}")
+optdepends=(
+    's!btrfs-progs: support btrfs backend devices'
+    'r!buildah: CLI tool to facilitate building OCI images'
+    'r!catatonit: init process for containers'
+    'r!dbus-user-session: simple interprocess messaging system (systemd--user integration)'
+    'r!fuse-overlayfs>=1.0.0~: implementaion of overlay+shiftfs in FUSE for rootless containers'
+    'r!slirp4netns: User-mode networking for unpriviledged network namespaces'
+    'r!uidmap: programs to help use subuids'
+    's!containers-storage: CLI tools for handling how containers are stored on disk'
+    's!podman-compose: for docker-compose compatibility'
+    's!podman-docker: for Docker-compatible CLI'
+    's!iptables: administration tool for packet filtering and NAT'
+  )
+
+b2sums=('SKIP')
 conflicts=("${_gitname}-git" "${_gitname}-bin")
-backup=('/etc/containers/registries.conf'
-		'/etc/containers/policy.json')
 
 build() {
 	cd ${_gitname}
@@ -27,9 +54,6 @@ build() {
 }
 
 package() {
-	# installing config
-	install -Dm644 "registries.conf" "${pkgdir}/etc/containers/registries.conf"
-	install -Dm644 "default-policy.json" "${pkgdir}/etc/containers/policy.json"
 	# installing binaries
 	cd ${_gitname}
 	make install PREFIX="${pkgdir}/usr"
